@@ -1,0 +1,78 @@
+import datetime
+
+class DigitalLockSystem:
+    def __init__(self):
+        # Initialize the Digital Lock System with empty user dictionary,
+        # locked status, and an empty access log.
+        self.users = {}
+        self.is_locked = True
+        self.access_log = []
+
+    def add_user(self, username, passcode):
+        # Add a new user with the specified username and passcode.
+        self.users[username] = passcode
+
+    def enter_passcode(self, username, input_passcode):
+        # Attempt to unlock the system by checking the entered passcode.
+        if username in self.users and input_passcode == self.users[username]:
+            # If the passcode is correct, unlock the system and log the successful attempt.
+            timestamp = datetime.datetime.now()
+            print(f"{username} entered correct passcode at {timestamp}. Unlocking...")
+            self.is_locked = False
+            self.access_log.append((username, timestamp, "Successful"))
+        else:
+            # If the passcode is incorrect, log the failed attempt.
+            timestamp = datetime.datetime.now()
+            print(f"Incorrect passcode entered by {username} at {timestamp}. The system remains locked.")
+            self.access_log.append((username, timestamp, "Failed"))
+
+    def lock(self):
+        # Lock the system.
+        print("Locking the system.")
+        self.is_locked = True
+
+    def status(self):
+        # Display the current status of the system.
+        if self.is_locked:
+            print("The system is locked.")
+        else:
+            print("The system is unlocked.")
+
+    def view_access_log(self):
+        # Display the access log.
+        print("Access Log:")
+        for entry in self.access_log:
+            print(f"{entry[0]} - {entry[1]} - {entry[2]}")
+
+# Example Usage
+if __name__ == "__main__":
+    # Initialize the Digital Lock System
+    lock_system = DigitalLockSystem()
+
+    # Add users with their passcodes
+    lock_system.add_user("user1", "pass123")
+    lock_system.add_user("user2", "abc456")
+
+    # Check the initial status
+    lock_system.status()
+
+    # Attempt to unlock with the wrong passcode
+    lock_system.enter_passcode("user1", "wrongpass")
+
+    # Check the status again
+    lock_system.status()
+
+    # Unlock with the correct passcode
+    lock_system.enter_passcode("user1", "pass123")
+
+    # Check the status after unlocking
+    lock_system.status()
+
+    # Lock the system
+    lock_system.lock()
+
+    # Check the status after locking
+    lock_system.status()
+
+    # View the access log
+    lock_system.view_access_log()
